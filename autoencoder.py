@@ -56,9 +56,11 @@ class autoencoder:
         self.decoder_input = tf.placeholder(shape=[None, None], dtype=tf.int32)
         self.decoder_target = tf.placeholder(shape=[None, None], dtype=tf.int32)
         self.encoder_lengths = tf.placeholder(shape=[None, ], dtype=tf.int32)
-        self.decoder_weights = tf.Variable(tf.random_normal([self.dec_hidden_state, self.vocab_size], -1.0, 1.0), dtype=tf.float32)
+
+        initializer = tf.contrib.layers.xavier_initializer()
+        self.decoder_weights = tf.get_variable("self.decoder_weights", shape=[self.dec_hidden_state, self.vocab_size], initializer=initializer)
         self.decoder_bias = tf.Variable(tf.zeros(shape=[self.vocab_size]), dtype=tf.float32)
-        self.embeddings = tf.Variable(tf.random_normal([self.vocab_size, self.embedding_size], -1.0, 1.0), dtype=tf.float32)
+        self.embeddings = tf.get_variable("self.embeddings", shape=[self.vocab_size, self.embedding_size], initializer=initializer)
         self.keep_prob = tf.placeholder(tf.float32)
 
         assert self.dec_hidden_state == 2*self.enc_hidden_state
